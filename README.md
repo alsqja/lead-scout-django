@@ -97,7 +97,7 @@ Content-Type: application/json
 #### PDF 분석 결과 조회
 
 ```http
-GET /api/get-pdf-analysis/?profile_id=1
+GET /api/analyze-pdf/{profile_id}
 ```
 
 응답:
