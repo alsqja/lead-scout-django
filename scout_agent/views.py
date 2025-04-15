@@ -73,22 +73,7 @@ class PDFAnalysisView(APIView):
             return Response({
                 "status": "success",
                 "message": "PDF analysis completed successfully",
-                "analysis": {
-                    "industry": analysis.industry,
-                    "sales": analysis.sales,
-                    "total_funding": analysis.total_funding,
-                    "homepage": analysis.homepage,
-                    "key_executive": analysis.key_executive,
-                    "address": analysis.address,
-                    "email": analysis.email,
-                    "phone_number": analysis.phone_number,
-                    "company_description": analysis.company_description,
-                    "products_services": analysis.products_services,
-                    "target_customers": analysis.target_customers,
-                    "competitors": analysis.competitors,
-                    "strengths": analysis.strengths,
-                    "business_model": analysis.business_model
-                }
+                "analysis": analysis
             })
 
         except Exception as e:
@@ -121,10 +106,10 @@ class PDFAnalysisView(APIView):
                     "target_customers": analysis.target_customers,
                     "competitors": analysis.competitors,
                     "strengths": analysis.strengths,
-                    "business_model": analysis.business_model
+                    "business_model": analysis.business_model,
+                    "created_at": analysis.created_at,
+                    "updated_at": analysis.updated_at
                 },
-                "created_at": analysis.created_at,
-                "updated_at": analysis.updated_at
             })
 
         except Exception as e:
