@@ -8,6 +8,7 @@ import tempfile
 import urllib.request
 from django.db import transaction
 from scout_agent.repository.PDFAnalysis_repository import post_pdf_analysis
+from scout_agent.repository.company_data_repository import create_or_update_company_data
 
 
 class PDFAnalysisService:
@@ -32,7 +33,22 @@ class PDFAnalysisService:
             company_info = self._extract_company_info_with_ai(extracted_text, company_profile.company.company)
 
             with transaction.atomic():
-                pdf_analysis, created = post_pdf_analysis(
+                # 기본 회사 정보 업데이트 or 생성
+                create_or_update_company_data(
+                    company_name=company_profile.company,
+                    defaults={
+                        'industry': company_info.get('industry'),
+                        'sales': company_info.get('sales'),
+                        'total_funding': company_info.get('total_funding'),
+                        'homepage': company_info.get('homepage'),
+                        'key_executive': company_info.get('key_executive'),
+                        'address': company_info.get('address'),
+                        'email': company_info.get('email'),
+                        'phone_number': company_info.get('phone_number'),
+                    }
+                )
+
+                post_pdf_analysis(
                     company_profile.company,
                     company_profile,
                     {
