@@ -7,7 +7,6 @@ import json
 import tempfile
 import urllib.request
 from django.db import transaction
-from scout_agent.models import PDFAnalysis
 from scout_agent.repository.PDFAnalysis_repository import post_pdf_analysis
 
 
