@@ -1,8 +1,11 @@
 # services/agent_service.py
-import json
 from .openai_service import OpenAIService
 from .pdf_service import PDFAnalysisService
-from scout_agent.models import CompanyData, LeadProspect, CompanyProfile, PDFAnalysis
+from scout_agent.models import CompanyData
+from ..repository.PDFAnalysis_repository import get_pdf_analysis_by_company_and_profile
+from ..repository.company_data_repository import get_company_data_by_id, create_or_update_company_data
+from ..repository.company_profile_repository import get_company_profile_by_company
+from ..repository.lead_prospect_repository import create_or_update_prospect_data
 
 
 class LeadScoutAgent:
@@ -23,11 +26,11 @@ class LeadScoutAgent:
             print(f"리드 검색 시작: company_id={company_id}")
 
             # 소스 회사 정보 가져오기
-            source_company = CompanyData.objects.get(id=company_id)
+            source_company = get_company_data_by_id(company_id)
             print(f"소스 회사: {source_company.company}")
 
             # 회사에 대한 PDF 프로필이 있는지 확인
-            company_profiles = CompanyProfile.objects.filter(company=source_company)
+            company_profiles = get_company_profile_by_company(source_company)
             pdf_analyses = []
 
             if company_profiles.exists():
@@ -36,9 +39,9 @@ class LeadScoutAgent:
                 for profile in company_profiles:
                     try:
                         # 기존 분석본 확인
-                        existing_analysis = PDFAnalysis.objects.filter(
-                            company=source_company,
-                            profile=profile
+                        existing_analysis = get_pdf_analysis_by_company_and_profile(
+                            source_company,
+                            profile
                         ).first()
                         
                         if existing_analysis:
@@ -127,9 +130,9 @@ class LeadScoutAgent:
                     company_name = lead.get('company', 'Unknown')
                     print(f"리드 처리 중: {company_name}")
 
-                    prospect, created = CompanyData.objects.get_or_create(
-                        company=company_name,
-                        defaults={
+                    prospect, created = create_or_update_company_data(
+                        company_name,
+                        {
                             'industry': lead.get('industry'),
                             'sales': lead.get('sales'),
                             'total_funding': lead.get('total_funding'),
@@ -142,10 +145,10 @@ class LeadScoutAgent:
                     )
 
                     # 리드 관계 생성 또는 업데이트
-                    lead_relation, relation_created = LeadProspect.objects.update_or_create(
-                        source_company=source_company,
-                        prospect_company=prospect,
-                        defaults={
+                    lead_relation, relation_created = create_or_update_prospect_data(
+                        source_company,
+                        prospect,
+                        {
                             'relevance_score': lead.get('relevance_score', 0.0),
                             'reasoning': lead.get('reasoning', '')
                         }

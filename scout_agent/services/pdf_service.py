@@ -7,7 +7,8 @@ import json
 import tempfile
 import urllib.request
 from django.db import transaction
-from scout_agent.models import PDFAnalysis
+from scout_agent.repository.PDFAnalysis_repository import post_pdf_analysis
+from scout_agent.repository.company_data_repository import create_or_update_company_data
 
 
 class PDFAnalysisService:
@@ -17,11 +18,6 @@ class PDFAnalysisService:
     def analyze_company_pdf(self, company_profile):
         """
         PDF 파일을 분석하여 회사 정보를 추출하고 DB에 저장합니다.
-
-        Args:
-            pdf_path (str): PDF 파일 경로
-            company_name (str): 분석할 회사 이름
-            company_profile (CompanyProfile, optional): DB에 저장할 때 사용할 프로필 객체
 
         Returns:
             dict: 추출된 회사 정보
@@ -36,13 +32,26 @@ class PDFAnalysisService:
             # OpenAI를 사용하여 텍스트에서 회사 정보 추출
             company_info = self._extract_company_info_with_ai(extracted_text, company_profile.company.company)
 
-            # company_profile이 제공된 경우 DB에 저장
-
             with transaction.atomic():
-                pdf_analysis, created = PDFAnalysis.objects.update_or_create(
-                    company=company_profile.company,
-                    profile=company_profile,
+                # 기본 회사 정보 업데이트 or 생성
+                create_or_update_company_data(
+                    company_name=company_profile.company,
                     defaults={
+                        'industry': company_info.get('industry'),
+                        'sales': company_info.get('sales'),
+                        'total_funding': company_info.get('total_funding'),
+                        'homepage': company_info.get('homepage'),
+                        'key_executive': company_info.get('key_executive'),
+                        'address': company_info.get('address'),
+                        'email': company_info.get('email'),
+                        'phone_number': company_info.get('phone_number'),
+                    }
+                )
+
+                post_pdf_analysis(
+                    company_profile.company,
+                    company_profile,
+                    {
                         # 기본 회사 정보
                         'industry': company_info.get('industry'),
                         'sales': company_info.get('sales'),
