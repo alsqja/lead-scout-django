@@ -59,4 +59,5 @@ htmlcov/
 .tox/
 .coverage
 coverage.xml
-*.cover 
+*.cover
+/lead_scout.log

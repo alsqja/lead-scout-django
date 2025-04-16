@@ -8,6 +8,7 @@ import tempfile
 import urllib.request
 from django.db import transaction
 from scout_agent.models import PDFAnalysis
+from scout_agent.repository.PDFAnalysis_repository import post_pdf_analysis
 
 
 class PDFAnalysisService:
@@ -17,11 +18,6 @@ class PDFAnalysisService:
     def analyze_company_pdf(self, company_profile):
         """
         PDF 파일을 분석하여 회사 정보를 추출하고 DB에 저장합니다.
-
-        Args:
-            pdf_path (str): PDF 파일 경로
-            company_name (str): 분석할 회사 이름
-            company_profile (CompanyProfile, optional): DB에 저장할 때 사용할 프로필 객체
 
         Returns:
             dict: 추출된 회사 정보
@@ -36,13 +32,11 @@ class PDFAnalysisService:
             # OpenAI를 사용하여 텍스트에서 회사 정보 추출
             company_info = self._extract_company_info_with_ai(extracted_text, company_profile.company.company)
 
-            # company_profile이 제공된 경우 DB에 저장
-
             with transaction.atomic():
-                pdf_analysis, created = PDFAnalysis.objects.update_or_create(
-                    company=company_profile.company,
-                    profile=company_profile,
-                    defaults={
+                pdf_analysis, created = post_pdf_analysis(
+                    company_profile.company,
+                    company_profile,
+                    {
                         # 기본 회사 정보
                         'industry': company_info.get('industry'),
                         'sales': company_info.get('sales'),
