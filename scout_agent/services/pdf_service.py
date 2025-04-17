@@ -129,7 +129,6 @@ class PDFAnalysisService:
 
             다음 정보들을 최대한 정확하게 찾아 JSON 형식으로 반환해주세요:
             
-            # 기본 회사 정보
             - industry: 회사의 산업 분야 (예: "소프트웨어", "제조업" 등)
             - sales: 연간 매출액 (숫자만, 단위 없이)
             - total_funding: 총 투자 유치 금액 (숫자만, 단위 없이)
@@ -138,8 +137,6 @@ class PDFAnalysisService:
             - address: 회사 주소
             - email: 연락 이메일
             - phone_number: 연락처
-            
-            # 상세 정보
             - company_description: 회사 설명 및 핵심 사업 분야 (500자 이내)
             - products_services: 주요 제품 및 서비스 (쉼표로 구분된 목록)
             - target_customers: 주요 타겟 고객층 (쉼표로 구분된 목록)

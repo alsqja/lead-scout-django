@@ -5,7 +5,7 @@ from scout_agent.models import CompanyData
 class CompanyProfile(models.Model):
     company = models.ForeignKey(CompanyData, on_delete=models.CASCADE, related_name='profiles')
     file_name = models.CharField(max_length=255)
-    url = models.URLField()
+    url = models.URLField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

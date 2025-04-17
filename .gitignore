@@ -57,7 +57,8 @@ htmlcov/
 # Unit test / regression tests
 .pytest_cache/
 .tox/
-.coverage
 coverage.xml
 *.cover
-/lead_scout.log
+
+./lead_scout.log
+lead_scout.log
