@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ company_name }} 기업 정보</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 20px;
+        }
+
+        .company-title {
+            flex-grow: 1;
+        }
+
+        .company-title h1 {
+            margin-bottom: 5px;
+        }
+
+        .lead-score {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .lead-score h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .lead-score p {
+            margin: 5px 0 0;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-item h3 {
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .info-item p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .news-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e1e1e1;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .risk {
+            background-color: #ffecec;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #ff8a8a;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    {#        <img src="{{ logo_url|default:'https://via.placeholder.com/100' }}" alt="{{ company_name }} 로고" class="logo">#}
+    <div class="company-title">
+        <h1>{{ company_name }} 리포트</h1>
+        <p>{{ industry_keywords|default:'정보 없음' }}</p>
+    </div>
+    <div class="lead-score">
+        <h2>리드 점수</h2>
+        <p>{{ lead_score|default:'None' }}</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>1. 기본 정보</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <h3>회사명</h3>
+            <p>{{ company_name }}</p>
+        </div>
+        <div class="info-item">
+            <h3>주요 산업 키워드</h3>
+            <p>{{ industry_keywords|default:'정보 없음' }}</p>
+        </div>
+        <div class="info-item">
+            <h3>홈페이지</h3>
+            <p><a href="{{ homepage_url|default:'#' }}" target="_blank">{{ homepage_url|default:'정보 없음' }}</a></p>
+        </div>
+        <div class="info-item">
+            <h3>회사 주소/위치</h3>
+            <p>{{ company_address|default:'정보 없음' }}</p>
+        </div>
+        <div class="info-item">
+            <h3>대표자/주요 인물</h3>
+            <p>{{ key_executives|default:'정보 없음' }}</p>
+        </div>
+        <div class="info-item">
+            <h3>설립일</h3>
+            <p>{{ founded_date|default:'정보 없음' }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>2. 사업 개요</h2>
+    <div class="info-item">
+        <h3>기업 요약</h3>
+        <p>{{ company_summary|default:'정보 없음' }}</p>
+    </div>
+    <div class="info-item">
+        <h3>타겟 고객군</h3>
+        <p>{{ target_customers|default:'정보 없음' }}</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. 핵심 영업 참고 정보</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <h3>재무 정보</h3>
+            <p>{{ financial_info|default:'정보 없음' }}</p>
+        </div>
+        <div class="info-item">
+            <h3>최신 동향</h3>
+            <p>{{ recent_trends|default:'정보 없음' }}</p>
+        </div>
+        <div class="info-item">
+            <h3>경쟁사</h3>
+            <p>{{ competitors|default:'정보 없음' }}</p>
+        </div>
+        <div class="info-item">
+            <h3>강점 및 차별점</h3>
+            <p>{{ strengths|default:'정보 없음' }}</p>
+        </div>
+    </div>
+    <div class="info-item risk">
+        <h3>리스크 요인</h3>
+        <p>{{ risk_factors|default:'특별한 리스크 요인이 발견되지 않았습니다' }}</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. 뉴스 링크</h2>
+    {% if news_links %}
+        {% for news in news_links %}
+            <div class="news-item">
+                <a href="{{ news.url }}" target="_blank">{{ news.title }}</a>
+                <p>{{ news.date }} | {{ news.source }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>관련 뉴스가 없습니다.</p>
+    {% endif %}
+</div>
+</body>
+</html>

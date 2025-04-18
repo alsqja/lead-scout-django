@@ -2,7 +2,7 @@ import logging
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .models import CompanyData, CompanyProfile, PDFAnalysis
+from .models import CompanyProfile, PDFAnalysis
 from .services.agent_service import LeadScoutAgent
 from .services.pdf_service import PDFAnalysisService
 from django.shortcuts import get_object_or_404
