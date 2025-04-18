@@ -1,11 +1,11 @@
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.views import APIView
-from django.template.loader import render_to_string
 from django.http import HttpResponse
+from django.template.loader import render_to_string
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from scout_agent.repository import lead_prospect_repository
 from .services.lead_details_service import LeadDetailsService
+
 
 class LeadDataView(APIView):
     def post(self, request):
@@ -22,7 +22,7 @@ class LeadDataView(APIView):
             )
 
         # 여기서 비즈니스 로직을 통해 회사 정보를 가져옵니다
-        result = LeadDetailsService().search_company_details(search_company_name)
+        result = LeadDetailsService().search_company_details(search_company_name, company_id)
 
         # HTML 템플릿 렌더링
         html_content = render_to_string('lead_data_template.html', result)
