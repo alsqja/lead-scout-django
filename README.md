@@ -9,6 +9,7 @@ Lead Scout는 기업 정보를 분석하고 잠재 고객을 발굴하는 AI 기
 - PDF 문서 분석 및 정보 추출
 - 기업 프로필 관리
 - 잠재 고객 발굴 및 분석
+- 기업명 활용 데이터 검색 및 HTML 보고서 제공
 
 ## 기술 스택
 
@@ -55,6 +56,242 @@ python manage.py runserver
 ```
 
 ## API 문서
+
+### 1. 회사 검색 및 보고서 응답
+
+#### 보고서 작성 요청
+
+```http
+POST /api/lead/details/
+Content-Type: application/json
+
+{
+    "search_company_name": "토스",
+    "company_id": 12
+}
+```
+
+응답:
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>비바리퍼블리카 기업 정보</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            max-width: 100px;
+            max-height: 100px;
+            margin-right: 20px;
+        }
+
+        .company-title {
+            flex-grow: 1;
+        }
+
+        .company-title h1 {
+            margin-bottom: 5px;
+        }
+
+        .lead-score {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .lead-score h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .lead-score p {
+            margin: 5px 0 0;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid #e1e1e1;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .section h2 {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-item h3 {
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 16px;
+        }
+
+        .info-item p {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .news-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e1e1e1;
+        }
+
+        .news-item:last-child {
+            border-bottom: none;
+        }
+
+        .risk {
+            background-color: #ffecec;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #ff8a8a;
+        }
+    </style>
+</head>
+
+<body>
+<div class="header">
+
+    <div class="company-title">
+        <h1>비바리퍼블리카 리포트</h1>
+        <p>핀테크, 금융, 송금, 결제, 투자, 보험</p>
+    </div>
+    <div class="lead-score">
+        <h2>리드 점수</h2>
+        <p>8</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>1. 기본 정보</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <h3>회사명</h3>
+            <p>비바리퍼블리카</p>
+        </div>
+        <div class="info-item">
+            <h3>주요 산업 키워드</h3>
+            <p>핀테크, 금융, 송금, 결제, 투자, 보험</p>
+        </div>
+        <div class="info-item">
+            <h3>홈페이지</h3>
+            <p><a href="https://toss.im/" target="_blank">https://toss.im/</a></p>
+        </div>
+        <div class="info-item">
+            <h3>회사 주소/위치</h3>
+            <p>정보 없음</p>
+        </div>
+        <div class="info-item">
+            <h3>대표자/주요 인물</h3>
+            <p>이승건 대표이사</p>
+        </div>
+        <div class="info-item">
+            <h3>설립일</h3>
+            <p>2013년 4월 23일</p>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>2. 사업 개요</h2>
+    <div class="info-item">
+        <h3>기업 요약</h3>
+        <p>토스는 비바리퍼블리카가 운영하는 모바일 금융 서비스로, 간편 송금, 결제, 대출 중개, 광고 등 다양한 금융 서비스를 제공하며, 2024년 3분기 기준 월간 활성 이용자 수(MAU)는
+            1,910만 명에 달합니다.</p>
+    </div>
+    <div class="info-item">
+        <h3>타겟 고객군</h3>
+        <p>일반 소비자, 중소기업, 대기업, 금융기관</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>3. 핵심 영업 참고 정보</h2>
+    <div class="info-grid">
+        <div class="info-item">
+            <h3>재무 정보</h3>
+            <p>2024년 3분기 연결 영업수익 5,021억 원, 연결 영업이익 109억 원, 연결 당기순이익 39억 원, 2024년 3분기 누적 영업수익 1조 4,163억 원</p>
+        </div>
+        <div class="info-item">
+            <h3>최신 동향</h3>
+            <p>2024년 3분기 기준 분기 최대 실적을 달성하며, 광고, 간편결제, 대출 중개 등 컨슈머 서비스 전반의 고른 성장을 보이고 있습니다.</p>
+        </div>
+        <div class="info-item">
+            <h3>경쟁사</h3>
+            <p>카카오페이, 핀다</p>
+        </div>
+        <div class="info-item">
+            <h3>강점 및 차별점</h3>
+            <p>사용자 중심의 간편한 인터페이스, 혁신적인 기술 도입, 강력한 마케팅 전략, 종합 금융 플랫폼으로의 확장성</p>
+        </div>
+    </div>
+    <div class="info-item risk">
+        <h3>리스크 요인</h3>
+        <p>경쟁 심화, 신뢰 구축, 서비스 다양화, 규제 대응</p>
+    </div>
+</div>
+
+<div class="section">
+    <h2>4. 뉴스 링크</h2>
+
+
+    <div class="news-item">
+        <a href="https://www.hankookilbo.com/News/Read/A2023122015480004853" target="_blank">토스, 월 광고 매출 100억 돌파</a>
+        <p>2023-12-21 | 한국일보</p>
+    </div>
+
+    <div class="news-item">
+        <a href="https://news.tf.co.kr/read/economy/2073280.htm" target="_blank">토스, IPO 본격 시동…대표 주관사로 한투·미래에셋
+            선정</a>
+        <p>2024-02-02 | 더팩트</p>
+    </div>
+
+    <div class="news-item">
+        <a href="https://www.hankookilbo.com/News/Read/A2024102410300005526" target="_blank">토스인사이트 새 대표에 손병두 전 거래소
+            이사장</a>
+        <p>2024-10-24 | 한국일보</p>
+    </div>
+
+
+</div>
+</body>
+
+</html>
+```
 
 ### 2. PDF 분석
 
@@ -143,31 +380,33 @@ Content-Type: application/json
 
 ```json
 {
-    "status": "success",
-    "message": "Found 5 potential leads",
-    "source_used": "pdf_analysis",
-    "leads": [
-        {
-            "company": "삼성전자",
-            "industry": "전자제품 제조",
-            "sales": 230000000000.0,
-            "total_funding": 0.0,
-            "homepage": "https://www.samsung.com/",
-            "key_executive": "이재용",
-            "relevance_score": 0.85,
-            "reasoning": "삼성전자는 다양한 B2B 제품과 서비스를 제공하며, 대규모 세일즈 팀을 운영하고 있습니다. 더선한 주식회사의 AI 기반 세일즈 인텔리전스 소프트웨어를 활용하여 세일즈 리드 추천 및 거래 성사율을 높일 수 있습니다. 또한, 삼성전자의 글로벌 네트워크를 통해 더선한 주식회사의 솔루션을 해외 시장에 확장할 수 있는 기회도 있습니다."
-        },
-        // 총 5개 리드 출력
-    ]
+  "status": "success",
+  "message": "Found 5 potential leads",
+  "source_used": "pdf_analysis",
+  "leads": [
+    {
+      "company": "삼성전자",
+      "industry": "전자제품 제조",
+      "sales": 230000000000.0,
+      "total_funding": 0.0,
+      "homepage": "https://www.samsung.com/",
+      "key_executive": "이재용",
+      "relevance_score": 0.85,
+      "reasoning": "삼성전자는 다양한 B2B 제품과 서비스를 제공하며, 대규모 세일즈 팀을 운영하고 있습니다. 더선한 주식회사의 AI 기반 세일즈 인텔리전스 소프트웨어를 활용하여 세일즈 리드 추천 및 거래 성사율을 높일 수 있습니다. 또한, 삼성전자의 글로벌 네트워크를 통해 더선한 주식회사의 솔루션을 해외 시장에 확장할 수 있는 기회도 있습니다."
+    }
+    // 총 5개 리드 출력
+  ]
 }
 ```
 
 ## DB
+
 ![image](https://github.com/user-attachments/assets/83de8dfa-036b-4bfd-b910-daeb4e259c15)
 
 ## Prompt
 
 ### 1. PDF 요약 Prompt
+
 ```
             당신은 회사 분석 전문가입니다. 아래 제공된 PDF에서 추출한 텍스트를 분석하여 "{company_name}" 회사에 대한 상세 정보를 추출해주세요.
 
@@ -199,7 +438,9 @@ Content-Type: application/json
 
             JSON 형식으로만 응답해주세요. 다른 텍스트나 설명은 포함하지 마세요.
 ```
+
 ### 2. Lead 탐색 Prompt
+
 ```
         당신은 B2B 영업 리드 스카우트 전문가입니다. 
         아래 회사 정보를 기반으로 이 회사에 제품이나 서비스를 판매하기에 적합한 잠재적인 영업 타겟이 될 수 있는 회사 5개를 찾아주세요.
