@@ -22,7 +22,7 @@ class LeadDataView(APIView):
             )
 
         # 여기서 비즈니스 로직을 통해 회사 정보를 가져옵니다
-        result = LeadDetailsService().search_company_details(search_company_name, company_id)
+        result = LeadDetailsService().extract_info(search_company_name)
 
         # HTML 템플릿 렌더링
         html_content = render_to_string('lead_data_template.html', result)
